@@ -1,13 +1,17 @@
 <template>
   <v-text-field
+    :class="rounded ? 'rounded' : ''"
     variant="outlined"
-    v-model="newTask"
-    label="What are you working on?"
+    v-model="textValue"
+    :placeholder="placeholder"
+    density="compact"
+    hide-details
+    @keyup.enter="handleEnterKey"
   >
     <template v-slot:append-inner>
-      <v-fade-transition>
-        <v-btn v-show="newTask" icon="mdi-plus-circle" variant="text"></v-btn>
-      </v-fade-transition>
+      <v-btn ref="submitButton" icon @click="handleAddTask">
+        <v-icon size="35" color="blue">mdi-plus-circle</v-icon>
+      </v-btn>
     </template>
   </v-text-field>
 </template>
@@ -16,11 +20,34 @@
 <script>
 export default {
   data: () => ({
-    newTask: null,
+    textValue: null,
   }),
-
-  computed: {},
-
-  methods: {},
+  props: {
+    placeholder: {
+      type: String,
+    },
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
+    handleEnterKey() {
+      this.handleAddTask();
+    },
+    handleAddTask() {
+      this.$emit("addTask", this.textValue);
+      this.clearTextValue();
+    },
+    clearTextValue() {
+      this.textValue = "";
+    },
+  },
 };
 </script>
+
+<style lang="scss" scoped>
+.rounded {
+  border-radius: 20px;
+}
+</style>

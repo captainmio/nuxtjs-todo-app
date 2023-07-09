@@ -13,21 +13,23 @@
       >
         <v-card-title class="bg-gray-100 card-padding text-right space-x-2">
           <Button :rounded="true" color="blue"
-            >Tasks <v-badge color="white" content="6" inline></v-badge
-          ></Button>
+            >Tasks <Badge color="white" :content="getTodos.length"
+          /></Button>
           <Button :rounded="true" color="blue"
-            >Tasks Done <v-badge color="white" content="6" inline></v-badge
-          ></Button>
-          <Button :rounded="true" color="red"
+            >Tasks Done <Badge color="white" :content="countComplete"
+          /></Button>
+          <Button color="red" @click="deleteAllTodos"
             ><v-icon size="25" class="pr-2">mdi-delete</v-icon>Tasks</Button
           >
         </v-card-title>
         <v-card-item class="flex">
           <TodoItem
-            v-for="todo in todos"
+            v-for="todo in getTodos"
             :key="todo.id"
-            :data="todo"
+            :item="todo"
             classValue="mt-3"
+            @toggleStatus="toggleStatus"
+            @doDelete="doDelete"
           />
         </v-card-item>
         <v-card-actions class="bg-gray-100 card-padding">
@@ -43,49 +45,40 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "pinia";
+import { useTodoStore } from "../store";
+
 export default {
-  data() {
-    return {
-      todos: [
-        {
-          name: "Task 1",
-          id: 1,
-          status: {
-            done: true,
-          },
-        },
-        {
-          name: "Task 2",
-          id: 2,
-          status: {
-            done: true,
-          },
-        },
-        {
-          name: "Task 3",
-          id: 3,
-          status: {
-            done: false,
-          },
-        },
-      ],
-    };
-  },
-  methods: {
-    handleAddTask(value) {
-      const lastObject = this.todos.reduce((prev, curr) => {
-        return curr.id > prev.id ? curr : prev;
+  computed: {
+    ...mapState(useTodoStore, ["getTodos"]),
+    countComplete() {
+      let completeTasks = this.getTodos.filter((todo) => {
+        return todo.status.done == true;
       });
 
-      const newTask = {
-        id: lastObject + 1,
-        name: value,
-        status: {
-          done: false,
-        },
-      };
-
-      this.todos = [...this.todos, newTask];
+      return completeTasks.length;
+    },
+  },
+  mounted() {
+    this.loadTodos();
+  },
+  methods: {
+    ...mapActions(useTodoStore, [
+      "addTodo",
+      "toggleStatusDone",
+      "loadTodos",
+      "persistTodos",
+      "deleteTodo",
+      "deleteAllTodos",
+    ]),
+    handleAddTask(value) {
+      this.addTodo(value);
+    },
+    toggleStatus(id) {
+      this.toggleStatusDone(id);
+    },
+    doDelete(id) {
+      this.deleteTodo(id);
     },
   },
 };

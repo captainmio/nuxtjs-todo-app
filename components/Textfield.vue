@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rounded {
-  border-radius: 20px;
+.rounded .v-input__control .v-input__slot {
+  border-radius: 50px !important;
 }
 </style>

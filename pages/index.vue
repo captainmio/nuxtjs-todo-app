@@ -45,8 +45,6 @@
         </v-card-actions>
       </v-card>
     </div>
-
-    <!-- <ToggleTip></ToggleTip> -->
   </div>
 </template>
 

@@ -7,7 +7,7 @@
         </h1>
       </div>
       <v-card
-        class="mx-auto w-100 p-4 border-0 bg-white"
+        class="mx-auto w-100 p-4 border-0 bg-white overflow-y-auto"
         max-width="700"
         variant="outlined"
       >
@@ -26,7 +26,7 @@
             ><v-icon size="25" class="pr-2">mdi-delete</v-icon>Tasks</Button
           >
         </v-card-title>
-        <v-card-item class="flex">
+        <v-card-item class="card-item">
           <TodoItem
             v-for="todo in getTodos"
             :key="todo.id"
@@ -45,6 +45,8 @@
         </v-card-actions>
       </v-card>
     </div>
+
+    <!-- <ToggleTip></ToggleTip> -->
   </div>
 </template>
 
@@ -83,5 +85,10 @@ export default {
 <style lang="scss" scoped>
 .card-padding {
   padding: 15px;
+}
+
+.card-item {
+  max-height: 300px;
+  overflow-y: auto;
 }
 </style>

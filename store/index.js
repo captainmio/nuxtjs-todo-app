@@ -53,7 +53,7 @@ export const useTodoStore = defineStore("todo", {
       this.persistTodos();
     },
     toggleStatusDone(id) {
-      let updateTask = this.todos.map((obj) => {
+      let updateTodos = this.todos.map((obj) => {
         if (obj.id === id) {
           return {
             ...obj,
@@ -66,7 +66,7 @@ export const useTodoStore = defineStore("todo", {
         return obj;
       });
 
-      this.todos = [...updateTask];
+      this.todos = [...updateTodos];
       this.persistTodos();
     },
     deleteTodo(id) {
@@ -79,6 +79,14 @@ export const useTodoStore = defineStore("todo", {
     deleteAllTodos() {
       this.todos = [];
 
+      this.persistTodos();
+    },
+    deleteDoneTodos() {
+      const doneTodos = this.todos.filter((todo) => {
+        return todo.status.done == false;
+      });
+
+      this.todos = [...doneTodos];
       this.persistTodos();
     },
     persistTodos() {

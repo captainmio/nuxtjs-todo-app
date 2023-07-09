@@ -9,9 +9,9 @@
     @keyup.enter="handleEnterKey"
   >
     <template v-slot:append-inner>
-      <v-btn ref="submitButton" icon @click="handleAddTask">
-        <v-icon size="35" color="blue">mdi-plus-circle</v-icon>
-      </v-btn>
+      <Button icon @click="handleAddTask"
+        ><v-icon size="35" color="blue">mdi-plus-circle</v-icon></Button
+      >
     </template>
   </v-text-field>
 </template>
@@ -36,8 +36,10 @@ export default {
       this.handleAddTask();
     },
     handleAddTask() {
-      this.$emit("addTask", this.textValue);
-      this.clearTextValue();
+      if (this.textValue) {
+        this.$emit("addTask", this.textValue);
+        this.clearTextValue();
+      }
     },
     clearTextValue() {
       this.textValue = "";

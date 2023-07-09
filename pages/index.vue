@@ -8,7 +8,7 @@
       </div>
       <v-card
         class="mx-auto w-100 p-4 border-0 bg-white"
-        max-width="600"
+        max-width="700"
         variant="outlined"
       >
         <v-card-title class="bg-gray-100 card-padding text-right space-x-2">
@@ -18,6 +18,10 @@
           <Button :rounded="true" color="blue"
             >Tasks Done <Badge color="white" :content="countComplete"
           /></Button>
+          <Button v-if="countComplete >= 1" color="red" @click="deleteDoneTodos"
+            ><v-icon size="25" class="pr-2">mdi-delete</v-icon> Tasks
+            Done</Button
+          >
           <Button color="red" @click="deleteAllTodos"
             ><v-icon size="25" class="pr-2">mdi-delete</v-icon>Tasks</Button
           >
@@ -28,15 +32,15 @@
             :key="todo.id"
             :item="todo"
             classValue="mt-3"
-            @toggleStatus="toggleStatus"
-            @doDelete="doDelete"
+            @toggleStatus="toggleStatusDone"
+            @doDelete="deleteTodo"
           />
         </v-card-item>
         <v-card-actions class="bg-gray-100 card-padding">
           <Textfield
             placeholder="New Task"
             :rounded="true"
-            @addTask="handleAddTask"
+            @addTask="addTodo"
           />
         </v-card-actions>
       </v-card>
@@ -70,16 +74,8 @@ export default {
       "persistTodos",
       "deleteTodo",
       "deleteAllTodos",
+      "deleteDoneTodos",
     ]),
-    handleAddTask(value) {
-      this.addTodo(value);
-    },
-    toggleStatus(id) {
-      this.toggleStatusDone(id);
-    },
-    doDelete(id) {
-      this.deleteTodo(id);
-    },
   },
 };
 </script>
